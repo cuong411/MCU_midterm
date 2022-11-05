@@ -100,32 +100,43 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   HAL_GPIO_WritePin(RED_LED_GPIO_Port, RED_LED_Pin, GPIO_PIN_SET);
+  // measure whether it is time out mode or normal mode
   int isTimeOut = 0;
+  // used to save the state before switching to time out mode
   int saved_state = 0;
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  // led blinky for debugging
 	  displayRedLed();
+	  // state machine between 2 modes
 	  switch(isTimeOut)
 	  {
 	  case 0:
+		  // execute simple button fsm
 	  	  fsm_simple_buttons_run();
+	  	  // check whether it is idle for 9 sec
 	  	  if(timer1_flag == 1)
 	  	  {
 	  		  timer1_flag = 0;
 	  		  set_timer1(1000);
+	  		  // save the state before swtiching
 	  		  saved_state = state;
+	  		  // switch the mode
 	  		  isTimeOut = 1;
 	  	  }
 	  	  break;
 	  case 1:
+		  // execute time out mode
 	  	  time_out_10s();
+	  	  // check whether the 2 buttons is pressed
 	  	  if(buttonInc_flag == 1 || buttonDec_flag == 1)
 	  	  {
 	  		  buttonInc_flag = 0;
 	  		  buttonDec_flag = 0;
+	  		  // return the state to the saved one
 	  		  state = saved_state;
 	  		  isTimeOut = 0;
 	  		  set_timer1(9000);
@@ -135,6 +146,7 @@ int main(void)
 		  isTimeOut = 0;
 		  break;
 	  }
+	  // display the state on the 7 segments LED
 	  display7SEG(state);
   }
   /* USER CODE END 3 */

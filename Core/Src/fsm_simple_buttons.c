@@ -35,11 +35,13 @@ void fsm_simple_buttons_run()
 
 void time_out_10s()
 {
+	// decrease the counter every 1 second
 	if(timer1_flag == 1)
 	{
 		timer1_flag = 0;
 		set_timer1(1000);
 		state--;
 	}
+    // stop decreasing when the counter reaches 0
 	if(state == 0) set_timer1(0);
 }
