@@ -1,1 +1,2 @@
 led_display.c:10:6:display7SEG	16	static
+led_display.c:29:6:displayRedLed	8	static
