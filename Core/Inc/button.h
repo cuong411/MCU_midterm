@@ -11,6 +11,9 @@
 #include "global.h"
 #include "main.h"
 
+#define LONG_PRESS_DURATION	3000
+#define KEY_PRESS_TIME_OUT	1000
+
 extern int buttonReset_flag;
 extern int buttonInc_flag;
 extern int buttonDec_flag;

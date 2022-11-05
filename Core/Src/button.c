@@ -7,33 +7,31 @@
 
 #include "button.h"
 
-int TimeOutForKeyPress = 0;
-
 int buttonReset_flag = 0;
 int buttonInc_flag = 0;
 int buttonDec_flag = 0;
 
-int buttonReset_count = 0;
-int buttonInc_count = 0;
-int buttonDec_count = 0;
+int buttonReset_counter = 0;
+int buttonInc_counter = 0;
+int buttonDec_counter = 0;
 
 void getKeyInputReset()
 {
     if(HAL_GPIO_ReadPin(RESET_GPIO_Port, RESET_Pin) == GPIO_PIN_RESET)
     {
-        buttonReset_count++;
-        if(buttonReset_count == (40 / TICK))
+        buttonReset_counter++;
+        if(buttonReset_counter == (40 / TICK))
         {
             buttonReset_flag = 1;
         }
     }
     else
     {
-        if(buttonReset_count < (40 / TICK))
+        if(buttonReset_counter < (40 / TICK))
         {
             buttonReset_flag = 0;
         }
-        buttonReset_count = 0;
+        buttonReset_counter = 0;
     }
 }
 
@@ -41,29 +39,23 @@ void getKeyInputInc()
 {
     if(HAL_GPIO_ReadPin(INC_GPIO_Port, INC_Pin) == GPIO_PIN_RESET)
     {
-        buttonInc_count++;
-        if(buttonInc_count == (40 / TICK))
+        buttonInc_counter++;
+        if(buttonInc_counter == (40 / TICK))
         {
             buttonInc_flag = 1;
         }
-        if(buttonInc_count >= (3000 / TICK))
+        if(buttonInc_counter >= (LONG_PRESS_DURATION / TICK) && buttonInc_counter % (KEY_PRESS_TIME_OUT / TICK) == 0)
         {
-            TimeOutForKeyPress--;
-            if(TimeOutForKeyPress <= 0)
-            {
-                buttonInc_flag = 1;
-                TimeOutForKeyPress = 1000 / TICK;
-            }
+        	buttonInc_flag = 1;
         }
     }
     else
     {
-        if(buttonInc_count < (40 / TICK))
+        if(buttonInc_counter < (40 / TICK))
         {
             buttonInc_flag = 0;
         }
-        buttonInc_count = 0;
-        TimeOutForKeyPress = 0;
+        buttonInc_counter = 0;
     }
 }
 
@@ -71,28 +63,22 @@ void getKeyInputDec()
 {
     if(HAL_GPIO_ReadPin(DEC_GPIO_Port, DEC_Pin) == GPIO_PIN_RESET)
     {
-        buttonDec_count++;
-        if(buttonDec_count == (40 / TICK))
+        buttonDec_counter++;
+        if(buttonDec_counter == (40 / TICK))
         {
             buttonDec_flag = 1;
         }
-        if(buttonDec_count >= (3000 / TICK))
-		{
-        	TimeOutForKeyPress--;
-        	if(TimeOutForKeyPress <= 0)
-        	{
-        		buttonDec_flag = 1;
-        		TimeOutForKeyPress = 1000 / TICK;
-        	}
-		}
+        if(buttonDec_counter >= (LONG_PRESS_DURATION / TICK) && buttonDec_counter % (KEY_PRESS_TIME_OUT / TICK) == 0)
+        {
+        	buttonDec_flag = 1;
+        }
     }
     else
     {
-        if(buttonDec_count < (40 / TICK))
+        if(buttonDec_counter < (40 / TICK))
         {
             buttonDec_flag = 0;
         }
-        buttonDec_count = 0;
-        TimeOutForKeyPress = 0;
+        buttonDec_counter = 0;
     }
 }
