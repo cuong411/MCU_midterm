@@ -1,2 +1,2 @@
 fsm_simple_buttons.c:13:6:fsm_simple_buttons_run	8	static
-fsm_simple_buttons.c:43:6:time_out_10s	8	static
+fsm_simple_buttons.c:36:6:time_out_10s	8	static

@@ -11,6 +11,7 @@
 #define TICK	10
 
 extern int state;
+extern int isTimeOut;
 
 
 #endif /* INC_GLOBAL_H_ */

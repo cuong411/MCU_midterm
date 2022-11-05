@@ -100,13 +100,42 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   HAL_GPIO_WritePin(RED_LED_GPIO_Port, RED_LED_Pin, GPIO_PIN_SET);
+  int isTimeOut = 0;
+  int saved_state = 0;
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
 	  displayRedLed();
-	  fsm_simple_buttons_run();
+	  switch(isTimeOut)
+	  {
+	  case 0:
+	  	  fsm_simple_buttons_run();
+	  	  if(timer1_flag == 1)
+	  	  {
+	  		  timer1_flag = 0;
+	  		  set_timer1(1000);
+	  		  saved_state = state;
+	  		  isTimeOut = 1;
+	  	  }
+	  	  break;
+	  case 1:
+	  	  time_out_10s();
+	  	  if(buttonInc_flag == 1 || buttonDec_flag == 1)
+	  	  {
+	  		  buttonInc_flag = 0;
+	  		  buttonDec_flag = 0;
+	  		  state = saved_state;
+	  		  isTimeOut = 0;
+	  		  set_timer1(9000);
+	  	  }
+	  	  break;
+	  default:
+		  isTimeOut = 0;
+		  break;
+	  }
+	  display7SEG(state);
   }
   /* USER CODE END 3 */
 }
