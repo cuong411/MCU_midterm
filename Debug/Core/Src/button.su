@@ -1,0 +1,3 @@
+button.c:20:6:getKeyInputReset	8	static
+button.c:40:6:getKeyInputInc	8	static
+button.c:70:6:getKeyInputDec	8	static
